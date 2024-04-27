@@ -1,0 +1,11 @@
+title: Rune Golems
+description: >-
+  A place for rune golems.
+baseurl: ""
+url: "https://runegolems.github.io"
+twitter_username: runegolems
+github_username: RuneGolems
+
+# theme: minima
+plugins:
+  - jekyll-feed

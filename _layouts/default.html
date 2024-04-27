@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | escape }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/golem-styles.css' | prepend: site.baseurl }}">
+</head>
+<body>
+    {{ content }}
+
+    <footer>
+        <span id="site-name">Rune Golems</span>
+        <a href="https://twitter.com/{{ site.twitter_username }}" id="twitter-link">x: @{{ site.twitter_username }}</a>
+        <a href="https://github.com/{{ site.github_username }}" id="github-link">github: @{{ site.github_username }}</a>
+    </footer>
+
+    <script src="{{ '/assets/js/golem-generator.js' | prepend: site.baseurl }}" defer></script>
+</body>
+</html>
