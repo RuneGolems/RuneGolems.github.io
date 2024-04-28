@@ -13,8 +13,8 @@ Follow these steps to etch your Golem:
 1. **Visit the Minting Page:** Head over to [Luminex Golem Minting](https://luminex.io/runes/mint){:target="_blank"}.
 2. **Etch Your Golem:** Once there, click on the **Etch** button to start the etching process.
 3. **Enter the Details:**
-   - **Rune Ticker:** Find the Rune Ticker from the table below and click to copy it to your clipboard.
    - **Icon/Logo:** Upload the golem you downloaded (can also click the image within the below table to save)
+   - **Rune Ticker:** Find the Rune Ticker from the table below and click to copy it to your clipboard.
    - **Symbol:** Similarly, copy the emoji by clicking on the image.
    - Ensure all other details from the table are correctly entered.
 
