@@ -27,7 +27,7 @@ const hats = [
     '/assets/traits/hats/band(black).png',
     '/assets/traits/hats/band(white).png',
     '/assets/traits/hats/beanie(blue).png',
-    '/assets/traits/hats/propHat.png',
+    '/assets/traits/hats/excalibur.png',
     '/assets/traits/hats/topHat.png',
     '/assets/traits/hats/strawHat.png',
 ];
