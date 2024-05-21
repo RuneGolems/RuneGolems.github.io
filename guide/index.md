@@ -2,21 +2,29 @@
 layout: default
 title: Golem Etching Guide
 ---
-
 # Golem Etching Guide
 
-Welcome to the Golem Etching Guide! This page provides detailed instructions on how to etch your golem onto Bitcoin.
+### Auto-fill:
 
-## Instructions for Etching Your Golem
-Follow these steps to etch your Golem:
+Follow these steps to automatically generate all rune details:
 
-1. **Visit the Minting Page:** Head over to [Luminex Golem Minting](https://luminex.io/runes/mint){:target="_blank"}.
+1. **Auto-fill:** Click the link below the table to automatically generate all rune details.
+2. **Logo:** Upload the golem you downloaded (can also click the image within the below table to save).
+3. **Submit Etch:** Once you have double-checked all details are correct, proceed to submit your etch.
+
+### Manual:
+
+If you prefer to manually enter the details, follow these steps:
+
+1. **Visit the Minting Page:** Head over to [Luminex](https://luminex.io/runes/mint){:target="_blank"}.
 2. **Etch Your Golem:** Once there, click on the **Etch** button to start the etching process.
 3. **Enter the Details:**
-   - **Icon/Logo:** Upload the golem you downloaded (can also click the image within the below table to save)
+   - **Icon/Logo:** Upload the golem you downloaded (can also click the image within the below table to save).
    - **Rune Ticker:** Find the Rune Ticker from the table below and click to copy it to your clipboard.
    - **Symbol:** Similarly, copy the emoji by clicking on the image.
-   - Ensure all other details from the table are correctly entered.
+   - **Ensure all other details from the table are correctly entered.**
+4. **Submit Etch:** Once you have double-checked all details are correct, proceed to submit your etch.
+   <!-- - *Once etching has been submitted, it will take 6 blocks to confirm & appear in your wallet.* -->
 
 <div class="info-table">
     <table>
@@ -62,44 +70,53 @@ Follow these steps to etch your Golem:
     </table>
 </div>
 
+<div class="link-container">
+    <a href="#" id="generate-link" class="back-link">Auto-fill details for Etching</a>
+</div>
+
 To generate another Golem, click the link below to return to the generator.
 
 <div class="link-container">
     <a href="/golems" class="back-link">Back to Generator</a>
 </div>
 
-
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const lastGolemImageDisplay = localStorage.getItem('lastGolemImageDisplay');
-    const lastGolemImageDownload = localStorage.getItem('lastGolemImageDownload');
+    const lastGolemImage = localStorage.getItem('lastGolemImage');
     const lastGolemHash = localStorage.getItem('lastGolemHash') || 'RUNE•GOLEM•XXXX';
 
-    if (lastGolemImageDisplay && document.getElementById('lastGolemImage')) {
-        document.getElementById('lastGolemImage').src = lastGolemImageDisplay;
+    if (lastGolemImage && document.getElementById('lastGolemImage')) {
+        document.getElementById('lastGolemImage').src = lastGolemImage;
+        document.getElementById('lastGolemImage').addEventListener('click', function() {
+            const link = document.createElement('a');
+            link.href = lastGolemImage;
+            link.download = `rune•golem•${lastGolemHash}.png`;
+            link.click();
+        });
     }
-    document.getElementById('lastGolemImage').addEventListener('click', function() {
-        const link = document.createElement('a');
-        link.href = lastGolemImageDownload;
-        link.download = `rune•golem•${lastGolemHash}.png`;
-        link.click();
-    });
+
     if (lastGolemHash && document.getElementById('runeTicker')) {
         document.getElementById('runeTicker').textContent = `RUNE•GOLEM•${lastGolemHash}`;
+        // Initialize custom tooltip for runeTicker
+        const runeTicker = document.getElementById('runeTicker');
+        runeTicker.addEventListener('mouseover', () => showTooltip(runeTicker, 'Click to copy'));
+        runeTicker.addEventListener('mouseout', () => hideTooltip(runeTicker));
+        runeTicker.addEventListener('click', () => {
+            // After a short delay, revert to the "Click to copy" message
+            setTimeout(() => showTooltip(runeTicker, 'Click to copy'), 2000);
+        });
     }
-    // Initialize custom tooltip for runeTicker
-    const runeTicker = document.getElementById('runeTicker');
-    runeTicker.addEventListener('mouseover', () => showTooltip(runeTicker, 'Click to copy'));
-    runeTicker.addEventListener('mouseout', () => hideTooltip(runeTicker));
-    runeTicker.addEventListener('click', () => {
-        // After a short delay, revert to the "Click to copy" message
-        setTimeout(() => showTooltip(runeTicker, 'Click to copy'), 2000);
-    });
 });
 
-
+document.addEventListener('DOMContentLoaded', function() {
+    const generateLink = document.getElementById('generate-link');
+    generateLink.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+        const lastGolemHash = localStorage.getItem('lastGolemHash') || 'XXXX'; // Get the last generated Golem hash
+        const link = `https://luminex.io/runes/mint?tab=Etch&ticker=RUNE•GOLEM•${lastGolemHash}&decimals=0&symbol=%F0%9F%AA%A8&maxSupply=1&limitPerMint=1&premine=1`;
+        window.open(link, '_blank'); // Open the generated link in a new tab
+    });
+});
 
 function showTooltip(target, message, customClass = 'tooltip') {
     let tooltip = target.querySelector(`.${customClass}`);
@@ -119,7 +136,6 @@ function hideTooltip(target, customClass = 'tooltip') {
     }
 }
 
-// Specialized function to show the copy confirmation tooltip
 function showCopyConfirm(target, message) {
     showTooltip(target, message, 'copy-confirm');
     setTimeout(() => {
@@ -131,7 +147,6 @@ function copyEmoji() {
     const emojiContainer = document.querySelector('.emoji-container');
     const emoji = document.getElementById('hiddenEmoji').textContent;
     navigator.clipboard.writeText(emoji).then(() => {
-        // Use the specific copy confirm tooltip function for the emoji
         showCopyConfirm(emojiContainer, 'Copied!');
     }).catch(err => {
         console.error('Failed to copy emoji to clipboard', err);
@@ -142,13 +157,10 @@ function copyToClipboard() {
     const runeTicker = document.getElementById('runeTicker');
     const runeTickerText = runeTicker.childNodes[0].nodeValue.trim();
     navigator.clipboard.writeText(runeTickerText).then(() => {
-        // Use the specific copy confirm tooltip function for the rune ticker
         showCopyConfirm(runeTicker, 'Copied!');
     }).catch(err => {
         console.error('Failed to copy text to clipboard', err);
         alert('Failed to copy text. Please try again.');
     });
 }
-
-
 </script>
