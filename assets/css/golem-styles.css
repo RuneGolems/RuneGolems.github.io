@@ -10,8 +10,9 @@ html, body {
     align-items: center;
     justify-content: center;
     padding-bottom: 60px;
+    padding-top: 60px;
+    /* overflow-x: hidden; */
 }
-
 /* Body Styling */
 body {
     background-color: black;
@@ -22,13 +23,26 @@ body {
 
 /* Header and Paragraphs */
 h1, p {
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
-    margin: 10px 0;
-    line-height: 1.5;
-    max-width: 80%;
+    /* margin: 10px 0; */
+    line-height: 1.2;
+    max-width: auto;
+    /* padding-bottom: 5px; */
+    /* margin-top: 15px; */
+    /* margin-bottom: 5px; */
+}
+p {
+    font-size: 14px;
+    text-align: center;
 }
 
+
+hr {
+    border: none;
+    border-top: 0.5px solid #676; 
+    margin: 0px 0; 
+}
 
 /* Button Styling */
 button {
@@ -74,6 +88,12 @@ button:hover {
     height: 100%;
 }
 
+#lastGolemImage {
+    width: 180px;
+    height: 180px;
+    /* image-rendering: pixelated; */
+}
+
 #hashDisplay {
     color: white;
     font-family: 'Courier New', monospace;
@@ -81,6 +101,38 @@ button:hover {
     padding: 20px;
     text-align: center;
 }
+
+/* Portal- */
+
+
+
+
+/* gallery */
+
+#artDisplay {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto 20px; /* Center horizontally and add space below */
+  }
+  
+  #artDisplay canvas {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto; /* Center horizontally */
+  }
+  
+  #gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px; /* Space below main display area */
+  }
+  
+  #gallery canvas {
+    display: block;
+    max-width: 100%;
+  }
 
 /* guide */
 .info-table table {
@@ -110,6 +162,7 @@ button:hover {
 .info-table img {
     width: 100%;
     height: auto;
+    image-rendering: pixelated;
 }
 
 span.checkmark {
@@ -122,14 +175,10 @@ span.checkmark {
     position: relative;
 }
 
-#lastGolemImage {
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-}
+
 
 .link-container {
-    margin-bottom: 50px; 
+    margin-bottom: 30px; 
 }
 
 .back-link {
@@ -151,7 +200,6 @@ span.checkmark {
 }
 
 .tooltip, .copy-confirm {
-    /* Shared styles for both tooltip types */
     position: absolute;
     bottom: 100%;
     left: 50%;
@@ -165,16 +213,133 @@ span.checkmark {
 }
 
 .tooltip {
-    /* Specific styles for regular tooltips */
     background-color: #333;
     color: white;
 }
 
 .copy-confirm {
-    /* Specific styles for copy confirmation tooltips */
     background-color: #4CAF50;
     color: white;
 }
+
+/* golem */
+#mysteriousGolem {
+    position: fixed;
+    bottom: -150px; /* Start off-screen */
+    right: 20px; /* Adjust to where you want the golem to start */
+    width: 180px;
+    height: 180px;
+    background: url('/assets/golem-.png') no-repeat;
+    background-size: contain;
+    image-rendering: pixelated;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it's above other elements */
+    transition: bottom 0.5s ease; /* Transition for the final move into place */
+}
+
+#mysteriousGolem.enter {
+    animation: peekAnimation 4s 1s forwards; /* Delay the start by 3 seconds, run once */
+}
+
+@keyframes peekAnimation {
+    0%, 100% {
+        bottom: 20px; /* Final visible position */
+    }
+    20%, 80% {
+        bottom: -100px; /* Lower than the starting position to hide */
+    }
+    30%, 90% {
+        bottom: 20px; /* Come up to visible position */
+    }
+}
+
+#mysteriousGolem:hover {
+    transform: scale(1.1); /* Scale up when hovered to indicate interactivity */
+    transition: transform 0.3s ease; /* Smooth scaling */
+}
+
+#mysteriousGolem.speak {
+    animation: talk 1s ease-in-out infinite;
+}
+
+#mysteriousGolem.mouth-open {
+    background-image: url('/assets/golem-o.png');
+}
+
+#mysteriousGolem.mouth-closed {
+    background-image: url('/assets/golem-_.png');
+}
+
+@keyframes talk {
+    0%, 100% { background-image: url('/assets/golem-o.png'); }
+    50% { background-image: url('/assets/golem-_.png'); }
+}
+
+
+
+#golemDialogue {
+    position: fixed;
+    bottom: 210px; /* Positioned above the golem */
+    right: 20px;
+    width: 300px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Increased border-radius for a softer, cloud-like edge */
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none; /* Initially hidden */
+    z-index: 999;
+    color: #333;
+}
+
+#golemDialogue::before {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: calc(50% - 10px); /* Centering the tail, adjust -10px to align perfectly */
+    border-width: 20px 20px 0;
+    border-style: solid;
+    border-color: #f9f9f9 transparent;
+    display: block;
+    width: 0;
+}
+
+#golemDialogue::after {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: calc(50% - 8px); /* Slightly more than ::before to cover the border and align perfectly */
+    border-width: 18px 18px 0;
+    border-style: solid;
+    border-color: #ccc transparent;
+    display: block;
+    width: 0;
+}
+
+.dialogue_button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dialogue_button:hover {
+    background-color: #0056b3;
+}
+
+
+.dialogue_button:focus {
+    outline: none; /* Remove focus outline for aesthetics */
+}
+
+
+
+
 
 /* Footer Styling */
 footer {
@@ -207,15 +372,119 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* Navbar Styling */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Optional: adds shadow for better visibility */
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin: 0 auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: center;
+}
+
+
+.navbar li {
+    padding: 0 20px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-hamburger {
+    display: none;
+}
+
 @media (max-width: 600px) {
+    #mysteriousGolem {
+        height: 54px;
+        width: 54px;
+    }
+    .link-container {
+        padding-bottom: 40px;
+    }
+
+    hr {
+        border-top: 3px solid #fff;
+        margin: 35px 0;
+    }
     footer {
         font-size: 12px;
-        padding: 5px 10px;
+        padding: 10px 0;
     }
     footer a {
         padding: 0 10px;
     }
     #site-name {
         font-size: 14px;
+    }
+    body {
+        padding-top: 60px;
+    }
+    .navbar {
+        background-color: transparent;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        padding: 0;
+        border: none;
+    }
+    .navbar-brand, .navbar-content {
+        display: none;
+    }
+    .navbar-hamburger {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: white;
+        font-size: 24px;
+        padding: 10px;
+    }
+    .navbar-hamburger:focus {
+        outline: none;
+    }
+    .navbar-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: #333;
+    }
+    .navbar-content.show {
+        display: flex;
+    }
+    .navbar-content ul {
+        width: 100%;
+        flex-direction: column;
+    }
+    .navbar-content li {
+        text-align: center;
+        width: 100%;
+        padding: 10px 0; /* Provide sufficient padding for touch targets */
     }
 }
