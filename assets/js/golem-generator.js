@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    setupEventListeners();
+    setupNavbarToggle();
+    setupPageSpecificListeners();
+    setupGolemListeners(); // Setup listeners related to the golem interaction
 });
+
+
 
 const backgrounds = [
     '/assets/traits/bg/background(red).png',
@@ -46,23 +50,50 @@ const runes = [
     '/assets/traits/runes/rune-(11).png',
 ];
 
-function setupEventListeners() {
-    document.getElementById('generateButton').addEventListener('click', async function() {
-        await handleGenerateButtonClick();
-    });
+function setupNavbarToggle() {
+    const hamburger = document.querySelector('.navbar-hamburger');
+    const navContent = document.querySelector('.navbar-content');
 
-    document.getElementById('downloadButton').addEventListener('click', async function() {
-        await handleDownloadButtonClick();
-    });
+    if (hamburger && navContent) {
+        hamburger.addEventListener('click', function() {
+            navContent.classList.toggle('show');
+        });
+    }
 }
+
+function setupPageSpecificListeners() {
+    const generateButton = document.getElementById('generateButton');
+    const downloadButton = document.getElementById('downloadButton');
+
+    if (generateButton) {
+        generateButton.addEventListener('click', async function() {
+            await handleGenerateButtonClick();
+        });
+    }
+
+    if (downloadButton) {
+        downloadButton.addEventListener('click', async function() {
+            await handleDownloadButtonClick();
+        });
+    }
+}
+
+
+
 
 async function handleGenerateButtonClick() {
-    const traits = pickRandomTraits();
-    displayGolem(traits);
-    const hash = await generateAlphaHash(traits);
-    await generateAndSaveCompositeImage(traits);
-    updateDisplayHash(hash);
+    try {
+        const traits = pickRandomTraits();
+        displayGolem(traits);
+        const hash = await generateAlphaHash(traits);
+        await generateAndSaveCompositeImage(traits);
+        updateDisplayHash(hash);
+    } catch (error) {
+        console.error("An error occurred during the generation process: ", error);
+        alert('Failed to generate golem. Please try again.');
+    }
 }
+
 
 
 async function handleDownloadButtonClick() {
@@ -81,6 +112,17 @@ function pickRandomTraits() {
         hat: getRandomItem(hats)
     };
 }
+
+function isValidTraits(traits) {
+    for (const key in traits) {
+        if (traits[key] === undefined) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 function decodeHashToTraits(hash) {
     const num = base26ToInt(hash);
@@ -123,22 +165,14 @@ function displayGolem(traits) {
     document.getElementById('golemBody').src = traits.body;
     document.getElementById('golemRune').src = traits.rune;
     document.getElementById('golemHat').src = traits.hat;
-
 }
 
 
 async function generateAndSaveCompositeImage(traits) {
-    // Create canvas for display
-    const canvasDisplay = document.createElement('canvas');
-    const ctxDisplay = canvasDisplay.getContext('2d');
-    canvasDisplay.width = 180;  // Larger size for display
-    canvasDisplay.height = 180;
-
-    // Create canvas for download
-    const canvasDownload = document.createElement('canvas');
-    const ctxDownload = canvasDownload.getContext('2d');
-    canvasDownload.width = 18;  // Original size for download
-    canvasDownload.height = 18;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 18;  // Default size for display
+    canvas.height = 18;
 
     const imagesToLoad = [
         document.getElementById('golemBackground').src,
@@ -149,26 +183,21 @@ async function generateAndSaveCompositeImage(traits) {
 
     try {
         const images = await Promise.all(imagesToLoad.map(loadImage));
-        // Draw images on both canvases
         images.forEach(img => {
-            ctxDisplay.drawImage(img, 0, 0, canvasDisplay.width, canvasDisplay.height);
-            ctxDownload.drawImage(img, 0, 0, canvasDownload.width, canvasDownload.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         });
-        const dataUrlDisplay = canvasDisplay.toDataURL('image/png');
-        const dataUrlDownload = canvasDownload.toDataURL('image/png');
-
-        // Save the display image URL and download image URL to localStorage
-        localStorage.setItem('lastGolemImageDisplay', dataUrlDisplay);
-        localStorage.setItem('lastGolemImageDownload', dataUrlDownload);
+        const dataUrl = canvas.toDataURL('image/png');
+        localStorage.setItem('lastGolemImage', dataUrl); // Store only one image
     } catch (error) {
         console.error("Failed to load one or more images: ", error);
     }
 }
 
 
+
 async function downloadGolem() {
     // Retrieve the last saved download image URL from localStorage
-    const dataUrl = localStorage.getItem('lastGolemImageDownload');
+    const dataUrl = localStorage.getItem('lastGolemImage');
     if (!dataUrl) {
         console.error("No saved golem image available for download.");
         return;
@@ -228,11 +257,10 @@ function updateDisplayHash(hash) {
 
     // Update content with new hash information
     hashDisplay.innerHTML = `
-        <p>Unique ID: ${hash}</p>
+        <h>Unique ID: ${hash}</h>
         <a href="/guide" style="display: block; margin-top: 10px;">Go to Etching Guide Page</a>
     `;
 }
-
 
 
 function loadImage(src) {
