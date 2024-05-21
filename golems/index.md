@@ -4,14 +4,15 @@ title: Generate Your Golem
 permalink: /golems/
 ---
 
-Welcome to the Golem Generator!
+# Welcome to the Golem Generator!
 
-# Generate Your Golem
-        |
-        |
-        |
-        |
-        V
+Generate Your Golem
+
+    |
+    |
+    |
+    |
+    V
 
 <div id="golemDisplay">
     <img id="golemBackground" src="/assets/hidden.png" alt="Background">
